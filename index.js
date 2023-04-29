@@ -16,7 +16,7 @@ app.use(express.json());
 const whitelist = ['http://localhost:8080', 'http://myapp.com'];
 const options = {
   origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1) {
+    if (whitelist.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -36,5 +36,6 @@ app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`Server listening on port: ${port}`);
 });

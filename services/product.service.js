@@ -30,11 +30,7 @@ class ProductsService {
   }
 
   async find() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.products);
-      }, 2000);
-    });
+    return this.products;
   }
 
   async findOne(id) {
