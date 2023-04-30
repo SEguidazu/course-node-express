@@ -1,12 +1,19 @@
+const pool = require('../libs/postgres.pool');
+
 class UserService {
-  constructor() {}
+  constructor() {
+    this.pool = pool;
+    this.pool.on('error', (err) => console.error(err));
+  }
 
   async create(data) {
     return data;
   }
 
   async find() {
-    return [];
+    const query = 'SELECT * FROM tasks';
+    const result = await this.pool.query(query);
+    return result.rows;
   }
 
   async findOne(id) {
