@@ -4,9 +4,9 @@ const routerApi = require('./routes');
 
 const {
   logErrors,
-  errorHandler,
-  boomErrorHandler,
   ormErrorHandler,
+  boomErrorHandler,
+  errorHandler,
 } = require('./middlewares/error.handler');
 
 const app = express();
@@ -39,5 +39,5 @@ app.use(errorHandler);
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log(`Server listening on port: ${port}`);
+  console.info(`Server listening on port: ${port}`);
 });

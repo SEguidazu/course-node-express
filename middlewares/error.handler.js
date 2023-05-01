@@ -1,8 +1,8 @@
-const { ValudationError } = require('sequelize');
+const { ValidationError } = require('sequelize');
 
 function logErrors(err, req, res, next) {
   // eslint-disable-next-line no-console
-  console.error(err);
+  console.error('logError: ', err);
   next(err);
 }
 
@@ -24,7 +24,7 @@ function boomErrorHandler(err, req, res, next) {
 }
 
 function ormErrorHandler(err, req, res, next) {
-  if (err instanceof ValudationError) {
+  if (err instanceof ValidationError) {
     res.status(409).json({
       message: err.name,
       errors: err.errors,
