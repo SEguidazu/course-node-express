@@ -5,8 +5,6 @@ class UserService {
   constructor() {}
 
   async create(data) {
-    const user = await models.User.findOne({ where: { email: data.email } });
-    if (user) throw boom.conflict('User already exists');
     const newUser = await models.User.create(data);
     return newUser;
   }
