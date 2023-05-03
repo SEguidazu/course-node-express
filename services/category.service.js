@@ -1,3 +1,4 @@
+const boom = require('@hapi/boom');
 const { models } = require('../libs/sequelize');
 
 class CategoryService {
@@ -21,13 +22,24 @@ class CategoryService {
   }
 
   async update(id, changes) {
-    return {
-      id,
-      changes,
-    };
+    const response = await models.Category.update(changes, {
+      where: { id },
+      returning: true,
+      plain: true,
+    });
+    if (!response[1]) {
+      throw boom.notFound('Category not found');
+    }
+    return response[1].dataValues;
   }
 
   async delete(id) {
+    const response = await models.Category.destroy({
+      where: { id },
+    });
+    if (response === 0) {
+      throw boom.notFound('Category not found');
+    }
     return { id };
   }
 }

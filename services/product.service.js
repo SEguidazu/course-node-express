@@ -22,35 +22,31 @@ class ProductsService {
   }
 
   async findOne(id) {
-    const product = this.products.find((product) => product.id === id);
-    if (!product) {
-      throw boom.notFound('Product not found');
-    }
-    if (product.isBlock) {
-      throw boom.conflict('Product is block');
-    }
+    const product = await models.Product.findByPk(id, {
+      include: ['category'],
+    });
     return product;
   }
 
   async update(id, changes) {
-    const index = this.products.findIndex((product) => product.id === id);
-    if (index === -1) {
+    const response = await models.Product.update(changes, {
+      where: { id },
+      returning: true,
+      plain: true,
+    });
+    if (!response[1]) {
       throw boom.notFound('Product not found');
     }
-    const product = this.products[index];
-    this.products[index] = {
-      ...product,
-      ...changes,
-    };
-    return this.products[index];
+    return response[1].dataValues;
   }
 
   async delete(id) {
-    const index = this.products.findIndex((product) => product.id === id);
-    if (index === -1) {
+    const response = await models.Product.destroy({
+      where: { id },
+    });
+    if (response === 0) {
       throw boom.notFound('Product not found');
     }
-    this.products.splice(index, 1);
     return { id };
   }
 }
