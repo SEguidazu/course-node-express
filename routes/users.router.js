@@ -14,7 +14,7 @@ const service = new UserService();
 router.get('/', async (req, res, next) => {
   try {
     const categories = await service.find();
-    res.json(categories);
+    res.status(200).json(categories);
   } catch (error) {
     next(error);
   }
@@ -27,7 +27,7 @@ router.get(
     try {
       const { id } = req.params;
       const category = await service.findOne(id);
-      res.json(category);
+      res.status(200).json(category);
     } catch (error) {
       next(error);
     }
@@ -57,7 +57,7 @@ router.patch(
       const { id } = req.params;
       const body = req.body;
       const category = await service.update(id, body);
-      res.json(category);
+      res.status(204).json(category);
     } catch (error) {
       next(error);
     }
@@ -70,8 +70,7 @@ router.delete(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({ id });
+      res.status(201).json(await service.delete(id));
     } catch (error) {
       next(error);
     }

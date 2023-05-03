@@ -18,28 +18,19 @@ class CategoryService {
     const category = await models.Category.findByPk(id, {
       include: ['products'],
     });
+    if (!category) throw boom.notFound('Category not found');
     return category;
   }
 
   async update(id, changes) {
-    const response = await models.Category.update(changes, {
-      where: { id },
-      returning: true,
-      plain: true,
-    });
-    if (!response[1]) {
-      throw boom.notFound('Category not found');
-    }
-    return response[1].dataValues;
+    const category = await this.findOne(id);
+    const result = await category.update(changes);
+    return result.dataValues;
   }
 
   async delete(id) {
-    const response = await models.Category.destroy({
-      where: { id },
-    });
-    if (response === 0) {
-      throw boom.notFound('Category not found');
-    }
+    const category = await this.findOne(id);
+    await category.destroy();
     return { id };
   }
 }

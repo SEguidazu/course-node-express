@@ -24,8 +24,8 @@ router.get(
       const { id } = req.params;
       const product = await service.findOne(id);
       res.status(200).json(product);
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      next(error);
     }
   }
 );
@@ -38,8 +38,8 @@ router.post(
       const body = req.body;
       const newProduct = await service.create(body);
       res.status(201).json(newProduct);
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      next(error);
     }
   }
 );
@@ -54,8 +54,8 @@ router.patch(
       const body = req.body;
       const product = await service.update(id, body);
       res.status(204).json(product);
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      next(error);
     }
   }
 );
@@ -67,8 +67,8 @@ router.delete(
     try {
       const { id } = req.params;
       res.status(204).json(await service.delete(id));
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      next(error);
     }
   }
 );

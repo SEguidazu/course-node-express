@@ -25,28 +25,19 @@ class OrderService {
         },
       ],
     });
+    if (!order) throw boom.notFound('Order not found');
     return order;
   }
 
   async update(id, changes) {
-    const response = await models.Order.update(changes, {
-      where: { id },
-      returning: true,
-      plain: true,
-    });
-    if (!response[1]) {
-      throw boom.notFound('Order not found');
-    }
-    return response[1].dataValues;
+    const order = await this.findOne(id);
+    const result = await order.update(changes);
+    return result.dataValues;
   }
 
   async delete(id) {
-    const response = await models.Order.destroy({
-      where: { id },
-    });
-    if (response === 0) {
-      throw boom.notFound('Order not found');
-    }
+    const order = await this.findOne(id);
+    await order.destroy();
     return { id };
   }
 }

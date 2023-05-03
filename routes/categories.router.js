@@ -11,13 +11,9 @@ const {
 const router = express.Router();
 const service = new CategoryService();
 
-router.get('/', async (req, res, next) => {
-  try {
-    const categories = await service.find();
-    res.json(categories);
-  } catch (error) {
-    next(error);
-  }
+router.get('/', async (req, res) => {
+  const categories = await service.find();
+  res.status(200).json(categories);
 });
 
 router.get(
@@ -27,7 +23,7 @@ router.get(
     try {
       const { id } = req.params;
       const category = await service.findOne(id);
-      res.json(category);
+      res.status(200).json(category);
     } catch (error) {
       next(error);
     }

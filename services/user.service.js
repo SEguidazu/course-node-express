@@ -10,14 +10,16 @@ class UserService {
   }
 
   async find() {
-    const result = await models.User.findAll({
+    const users = await models.User.findAll({
       include: ['customer'],
     });
-    return result;
+    return users;
   }
 
   async findOne(id) {
-    const user = await models.User.findByPk(id);
+    const user = await models.User.findByPk(id, {
+      include: ['customer'],
+    });
     if (!user) throw boom.notFound('User not found');
     return user;
   }
@@ -25,7 +27,7 @@ class UserService {
   async update(id, changes) {
     const user = await this.findOne(id);
     const result = await user.update(changes);
-    return result;
+    return result.dataValues;
   }
 
   async delete(id) {
