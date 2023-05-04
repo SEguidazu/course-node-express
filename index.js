@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const routerApi = require('./routes');
+const { checkApiKey } = require('./middlewares/auth.handler');
 
 const {
   logErrors,
@@ -27,6 +28,10 @@ const options = {
 app.use(cors(options));
 
 app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+app.get('/nueva-ruta', checkApiKey, (req, res) => {
   res.send('Hello World!');
 });
 
