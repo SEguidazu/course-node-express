@@ -2,7 +2,6 @@
 const express = require('express');
 const cors = require('cors');
 const routerApi = require('./routes');
-const { Roles } = require('./config/constants');
 
 const {
   logErrors,
@@ -29,12 +28,6 @@ const options = {
 app.use(cors(options));
 
 app.get('/', (req, res) => {
-  console.log('==========================');
-  console.log('tipo: ', typeof Roles);
-  console.log('roles: ', Roles);
-  console.log('values: ', Roles.values);
-  console.log('values: ', ...Object.values(Roles));
-  console.log('==========================');
   res.send('Hello World!');
 });
 

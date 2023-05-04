@@ -47,12 +47,12 @@ router.get(
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
-  checkRoles(Roles.ADMIN),
+  checkRoles(Roles.ADMIN, Roles.CUSTOMER),
   validatorHandler(createOrderSchema, 'body'),
   async (req, res, next) => {
     try {
-      const body = req.body;
-      const newOrder = await service.create(body);
+      const { user } = req;
+      const newOrder = await service.create(user.sub);
       res.status(201).json(newOrder);
     } catch (error) {
       next(error);
