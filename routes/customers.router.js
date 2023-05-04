@@ -11,9 +11,13 @@ const {
 const router = express.Router();
 const service = new CustomerService();
 
-router.get('/', async (req, res) => {
-  const customers = await service.find();
-  res.status(200).json(customers);
+router.get('/', async (req, res, next) => {
+  try {
+    const customers = await service.find();
+    res.status(200).json(customers);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get(
@@ -36,7 +40,8 @@ router.post(
   async (req, res, next) => {
     try {
       const body = req.body;
-      res.status(201).json(await service.create(body));
+      const newCustomer = await service.create(body);
+      res.status(201).json(newCustomer);
     } catch (error) {
       next(error);
     }
