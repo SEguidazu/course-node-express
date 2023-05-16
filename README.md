@@ -8,5 +8,5 @@ This is the project I created based on Platzi's Backend with Node.js course. The
 |--------|--------|--------------|
 | Node.js Backend Course: REST API with Express.js | Completed ☑️ | [LINK](https://platzi.com/p/eguidazu.san/curso/2485-backend-nodejs/diploma/detalle/) |
 | Node.js Backend Course: Database with PostgreSQL | Completed ☑️ | [LINK](https://platzi.com/p/eguidazu.san/curso/2507-backend-nodejs-postgres/diploma/detalle/) |
-| Node.js Backend Course: Authentication with Passport.js and JWT| In progress 👨🏻‍💻 | ❌ |
+| Node.js Backend Course: Authentication with Passport.js and JWT | Completed ☑️ | [LINK](https://platzi.com/p/eguidazu.san/curso/2489-passport/diploma/detalle/) |
 
