@@ -1,5 +1,7 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
+const { Roles } = require('../../config/constants');
+
 const USER_TABLE = 'users';
 
 const UserSchema = {
@@ -19,10 +21,18 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
+  recoveryToken: {
+    field: 'recovery_token',
+    allowNull: true,
+    type: DataTypes.STRING,
+  },
   role: {
     allowNull: false,
     type: DataTypes.STRING,
-    defaultValue: 'customer',
+    defaultValue: Roles.CUSTOMER,
+    validate: {
+      isIn: [Object.values(Roles)],
+    },
   },
   createAt: {
     allowNull: false,

@@ -1,33 +1,46 @@
 const express = require('express');
+const passport = require('passport');
 
-const UserService = require('./../services/user.service');
-const validatorHandler = require('./../middlewares/validator.handler');
+const { Roles } = require('../config/constants');
+
+const UserService = require('../services/user.service');
+
+const validatorHandler = require('../middlewares/validator.handler');
+const { checkRoles } = require('../middlewares/auth.handler');
+
 const {
   updateUserSchema,
   createUserSchema,
   getUserSchema,
-} = require('./../schemas/user.schema');
+} = require('../schemas/user.schema');
 
 const router = express.Router();
 const service = new UserService();
 
-router.get('/', async (req, res, next) => {
-  try {
-    const categories = await service.find();
-    res.status(200).json(categories);
-  } catch (error) {
-    next(error);
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(Roles.ADMIN),
+  async (req, res, next) => {
+    try {
+      const users = await service.find();
+      res.status(200).json(users);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get(
   '/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(Roles.ADMIN),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const category = await service.findOne(id);
-      res.status(200).json(category);
+      const user = await service.findOne(id);
+      res.status(200).json(user);
     } catch (error) {
       next(error);
     }
@@ -36,12 +49,14 @@ router.get(
 
 router.post(
   '/',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(Roles.ADMIN),
   validatorHandler(createUserSchema, 'body'),
   async (req, res, next) => {
     try {
-      const body = req.body;
-      const newCategory = await service.create(body);
-      res.status(201).json(newCategory);
+      const { body } = req;
+      const newUser = await service.create(body);
+      res.status(201).json(newUser);
     } catch (error) {
       next(error);
     }
@@ -50,14 +65,16 @@ router.post(
 
 router.patch(
   '/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(Roles.ADMIN),
   validatorHandler(getUserSchema, 'params'),
   validatorHandler(updateUserSchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const body = req.body;
-      const category = await service.update(id, body);
-      res.status(204).json(category);
+      const { body } = req;
+      const user = await service.update(id, body);
+      res.status(204).json(user);
     } catch (error) {
       next(error);
     }
@@ -66,6 +83,8 @@ router.patch(
 
 router.delete(
   '/:id',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(Roles.ADMIN),
   validatorHandler(getUserSchema, 'params'),
   async (req, res, next) => {
     try {

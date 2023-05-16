@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const express = require('express');
 const cors = require('cors');
 const routerApi = require('./routes');
@@ -29,6 +30,8 @@ app.use(cors(options));
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
+require('./utils/auth');
 
 routerApi(app);
 
