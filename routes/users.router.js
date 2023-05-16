@@ -54,7 +54,7 @@ router.post(
   validatorHandler(createUserSchema, 'body'),
   async (req, res, next) => {
     try {
-      const body = req.body;
+      const { body } = req;
       const newUser = await service.create(body);
       res.status(201).json(newUser);
     } catch (error) {
@@ -72,7 +72,7 @@ router.patch(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const body = req.body;
+      const { body } = req;
       const user = await service.update(id, body);
       res.status(204).json(user);
     } catch (error) {

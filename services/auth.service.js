@@ -18,6 +18,7 @@ class AuthService {
     if (!isMatch) throw boom.unauthorized();
 
     delete user.dataValues.password;
+    delete user.dataValues.recoveryToken;
     return user;
   }
 
@@ -53,6 +54,21 @@ class AuthService {
 
     const result = await this.sendMail(mail);
     return result;
+  }
+
+  async changePassword(token, newPassword) {
+    try {
+      const payload = jwt.verify(token, config.jwtSecret);
+      const user = await service.findOne(payload.sub);
+      if (user.recoveryToken !== token) throw boom.unauthorized();
+
+      const hash = await bcrypt.hash(newPassword, 10);
+      await service.update(user.id, { recoveryToken: null, password: hash });
+
+      return { message: 'Password updated successfully' };
+    } catch (error) {
+      throw boom.unauthorized();
+    }
   }
 
   async sendMail(infoMail) {

@@ -4,6 +4,7 @@ const { Roles } = require('../config/constants');
 const id = Joi.number().integer();
 const email = Joi.string().email();
 const password = Joi.string().min(8);
+const token = Joi.string().token();
 const role = Joi.string()
   .valid(...Object.values(Roles))
   .default(Roles.CUSTOMER);
@@ -20,7 +21,12 @@ const updateUserSchema = Joi.object({
 });
 
 const recoveryUserSchema = Joi.object({
-  email: email,
+  email: email.required(),
+});
+
+const changePasswordUserSchema = Joi.object({
+  token: token.required(),
+  newPassword: password.required(),
 });
 
 const getUserSchema = Joi.object({
@@ -30,6 +36,7 @@ const getUserSchema = Joi.object({
 module.exports = {
   createUserSchema,
   updateUserSchema,
-  recoveryUserSchema,
   getUserSchema,
+  recoveryUserSchema,
+  changePasswordUserSchema,
 };
